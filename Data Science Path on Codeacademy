@@ -1,0 +1,49 @@
+--3
+SELECT COUNT(*)
+FROM countries;
+
+--4
+SELECT countries.continent, SUM(population_years.population) AS 'Total amount of population in 2005'
+FROM population_years
+JOIN countries
+ON countries.id = population_years.country_id
+WHERE countries.continent = 'Oceania' AND population_years.year = 2005;
+
+--5
+SELECT countries.continent, ROUND(AVG(population_years.population),2) AS 'Population average in 2003'
+FROM population_years
+JOIN countries
+ON countries.id = population_years.country_id
+WHERE countries.continent = 'South America' AND population_years.year = 2003;
+
+--6
+SELECT countries.name, MIN(population_years.population) AS 'Smallers number of Population in 2007'
+FROM countries
+JOIN population_years
+ON countries.id = population_years.country_id
+WHERE population_years.year = 2007;
+
+--7
+SELECT countries.name, ROUND(AVG(population_years.population),2) AS 'Average population'
+FROM countries
+JOIN population_years
+ON countries.id = population_years.country_id
+WHERE countries.name = 'Poland';
+
+--8
+SELECT name
+FROM countries
+WHERE name LIKE '% The%' ;
+
+--9
+WITH previous_code AS(
+    SELECT country_id, SUM(population) AS 'total'
+    FROM population_years
+    WHERE year = 2010
+    GROUP BY 1
+)
+SELECT countries.continent, SUM(previous_code.total) AS 'Total population in 2007'
+FROM countries
+JOIN previous_code
+ON countries.id = previous_code.country_id
+GROUP BY 1;
